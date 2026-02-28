@@ -1,0 +1,39 @@
+﻿@model SystemVehiControl.Models.Engine
+
+@{
+    ViewData["Title"] = "Editar Motor";
+}
+
+<div class="card">
+    <form asp-action="Edit" method="post" class="form-horizontal">
+        <input type="hidden" asp-for="Id" />
+        <div class="card-body">
+            <h4 class="card-title">Editar Motor</h4>
+
+            <div class="form-group row">
+                <label asp-for="Name" class="col-sm-3 text-end control-label col-form-label">Nombre del Motor</label>
+                <div class="col-sm-9">
+                    <input asp-for="Name" class="form-control" placeholder="Ingrese nombre del motor" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="border-top">
+            <div class="card-body">
+                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @Html.ValidationSummary()
+    </div>
+}

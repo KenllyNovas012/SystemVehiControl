@@ -1,0 +1,84 @@
+﻿@model IEnumerable<SystemVehiControl.Models.VehicleReception>
+
+@{
+    ViewData["Title"] = "Recepciones de Vehículos";
+}
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" />
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet" />
+
+<div class="card">
+    <div class="card-body">
+        <h2>Lista de Recepciones</h2>
+        <a href="@Url.Action("Create", "VehicleReception")" class="btn btn-info btn-sm mb-3">Nueva Recepción</a>
+
+        <table id="receptions_table" class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Número de Orden</th>
+                    <th>Fecha Recepción</th>
+                    <th>Cliente</th>
+                    <th>Vehículo</th>
+                    <th>Motivo Visita</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.VehicleReceptionId</td>
+                        <td>@item.OrderNumber</td>
+                        <td>@item.ReceptionDate.ToShortDateString()</td>
+                        <td>@item.Client?.FullName</td>
+                        <td>@item.Vehicle?.LicensePlate</td>
+                        <td>@item.VisitReason</td>
+                        <td>
+                            <div class="d-flex gap-2">
+                                <a href="@Url.Action("Detail", "VehicleReception", new { id = item.VehicleReceptionId })" class="btn btn-primary btn-sm">Editar</a>
+                                <form id="deleteForm-@item.VehicleReceptionId" method="post" action="@Url.Action("Delete", "VehicleReception", new { id = item.VehicleReceptionId })">
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(@item.VehicleReceptionId)">Eliminar</button>
+                                </form>
+                                <button class="btn btn-secondary btn-sm" onclick="openPrint(@item.VehicleReceptionId)">Imprimir</button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#receptions_table').DataTable();
+        });
+
+        function confirmDelete(clientId) {
+            Swal.fire({
+                title: '¿Seguro que quieres eliminar este VehicleReception?',
+                text: "Esta acción no se puede deshacer.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById(`deleteForm-${clientId}`).submit();
+                }
+            });
+        }
+        function openPrint(id) {
+            window.open(`/VehicleReception/PrintView/${id}`, '_blank', 'width=900,height=650');
+        }
+    </script>
+}
+

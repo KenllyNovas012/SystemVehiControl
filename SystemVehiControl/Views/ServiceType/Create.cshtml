@@ -1,0 +1,48 @@
+﻿@model SystemVehiControl.Models.ServiceType
+
+@{
+    ViewData["Title"] = "Registrar Tipo de Servicio";
+}
+
+<div class="card">
+    <form asp-action="Create" method="post" class="form-horizontal">
+        <div class="card-body">
+            <h4 class="card-title">Registrar Nuevo Tipo de Servicio</h4>
+
+            <div class="form-group row">
+                <label asp-for="Name" class="col-sm-3 text-end control-label col-form-label">Nombre</label>
+                <div class="col-sm-9">
+                    <input asp-for="Name" class="form-control" placeholder="Ej. Mantenimiento, Reparación" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="Description" class="col-sm-3 text-end control-label col-form-label">Descripción</label>
+                <div class="col-sm-9">
+                    <textarea asp-for="Description" class="form-control" placeholder="Ingrese una descripción detallada"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+            </div>
+
+        </div>
+        <div class="border-top">
+            <div class="card-body">
+                <button type="submit" class="btn btn-primary">Guardar</button>
+                <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @Html.ValidationSummary()
+    </div>
+}

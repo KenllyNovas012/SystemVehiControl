@@ -1,0 +1,151 @@
+﻿@model IEnumerable<SystemVehiControl.Dto.ServiceCaseViewModel>  
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" />
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet" />
+
+<div class="card">
+    <div class="card-body">
+        <h2>Casos de Servicio</h2>
+        <br /><br />
+        <table id="servicecase_table" class="table table-striped table-bordered" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Mecánico</th>
+                    <th>Tipo Servicio</th>
+                    <th>Prioridad</th>
+                    <th>Fecha Entrada</th>
+                    <th>Entrega Estimada</th>
+                    <th>Último Comentario</th> <!-- 👈 Nueva columna -->
+                    <th>Estado</th>
+                    <th>Opción</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    var estados = new[] { "Abierto", "En proceso", "Cerrado", "En espera" };
+
+                    <tr>
+                        <td>@item.ServiceCase.GetUser?.Name</td>
+                        <td>@item.ServiceCase.ServiceType?.Name</td>
+                        <td>@item.ServiceCase.Priority?.Level</td>
+                        <td>@item.ServiceCase.EntryDate.ToShortDateString()</td>
+                        <td>@item.ServiceCase.EstimatedDeliveryDate.ToShortDateString()</td>
+
+                        <!-- 👇 Mostramos el último comentario -->
+                        <td>
+                            @if (item.LastComment != null)
+                            {
+                                <strong>@item.LastComment.User?.Name:</strong> @item.LastComment.Text <br />
+                                <small class="text-muted">@item.LastComment.CreatedAt.ToString("dd/MM/yyyy HH:mm")</small>
+                            }
+                            else
+                            {
+                                <em>Sin comentarios</em>
+                            }
+                        </td>
+
+                        <td>
+                            <select class="form-select status-select" data-id="@item.ServiceCase.Id">
+                                <option value="">-- Seleccione un estado --</option>
+                                @foreach (var estado in estados)
+                                {
+                                    <option value="@estado" selected="@(estado == item.ServiceCase.Status ? "selected" : null)">
+                                        @estado
+                                    </option>
+                                }
+                            </select>
+                        </td>
+                        <td>
+                            <div class="d-flex gap-2">
+                                <a href="@Url.Action("Edit", "ServiceCase", new { id = item.ServiceCase.Id })" class="btn btn-primary btn-sm">Ver Detalles</a>
+                               
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#servicecase_table').DataTable();
+        });
+
+        function confirmDelete(clientId) {
+            Swal.fire({
+                title: '¿Seguro que quieres eliminar este cliente?',
+                text: "Esta acción no se puede deshacer.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById(`deleteForm-${clientId}`).submit();
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".status-select").forEach(function (select) {
+                select.addEventListener("change", function () {
+                    const id = this.dataset.id;
+                    const newStatus = this.value;
+
+                    Swal.fire({
+                        title: 'Actualizando...',
+                        text: 'Por favor espera...',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    fetch(`/ServiceCase/UpdateStatus`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ id: id, status: newStatus })
+                    })
+                        .then(response => {
+                            Swal.close();
+                            if (response.ok) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Estado actualizado',
+                                    text: 'El estado se actualizó correctamente.',
+                                    confirmButtonText: 'OK'
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: 'Hubo un error al actualizar el estado.',
+                                    confirmButtonText: 'OK'
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error en la solicitud:", error);
+                            Swal.close();
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'No se pudo conectar con el servidor.',
+                                confirmButtonText: 'OK'
+                            });
+                        });
+                });
+            });
+        });
+    </script>
+}

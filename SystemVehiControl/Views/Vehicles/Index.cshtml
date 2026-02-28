@@ -1,0 +1,76 @@
+﻿@model IEnumerable<SystemVehiControl.Models.Vehicle>
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" />
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet" />
+
+<div class="card">
+    <div class="card-body">
+        <h2>Lista de Vehículos</h2>
+        <a href="@Url.Action("Create", "Vehicles")" class="btn btn-info btn-sm">Nuevo Vehículo</a>
+        <br /><br />
+        <table id="vehicle_table" class="table table-striped table-bordered" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Placa</th>
+                    <th>Chasis</th>
+                    <th>Marca</th>
+                    <th>Modelo</th>
+                    <th>Año</th>
+                    <th>Color</th>
+                    <th>Combustible</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var vehicle in Model)
+                {
+                    <tr>
+                        <td>@vehicle.LicensePlate</td>
+                        <td>@vehicle.ChassisNumber</td>
+                        <td>@vehicle.Brand?.Name</td>
+                        <td>@vehicle.Model</td>
+                        <td>@vehicle.Year</td>
+                        <td>@vehicle.Color</td>
+                        <td>@vehicle.FuelType</td>
+                        <td>
+                            <div class="d-flex gap-2">
+                                <a href="@Url.Action("Edit", "Vehicles", new { id = vehicle.VehicleId })" class="btn btn-primary btn-sm">Editar</a>
+                                <form id="deleteForm-@vehicle.VehicleId" method="post" action="@Url.Action("Delete", "Vehicles", new { id = vehicle.VehicleId })">
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(@vehicle.VehicleId)">Eliminar</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#vehicle_table').DataTable();
+        });
+
+        function confirmDelete(clientId) {
+            Swal.fire({
+                title: '¿Seguro que quieres eliminar este cliente?',
+                text: "Esta acción no se puede deshacer.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById(`deleteForm-${clientId}`).submit();
+                }
+            });
+        }
+    </script>
+}

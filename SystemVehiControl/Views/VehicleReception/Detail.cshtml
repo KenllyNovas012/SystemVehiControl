@@ -1,0 +1,442 @@
+﻿@model SystemVehiControl.Dto.VehicleReceptionDto
+
+
+<div class="card">
+    <form asp-action="Detail" method="post" class="form-horizontal" enctype="multipart/form-data">
+        <div class="card-body">
+            <h4 class="card-title">Registrar Recepción de Vehículo</h4>
+            
+            <input asp-for="VehicleReceptionId" type="hidden" />
+            <!-- Información principal -->
+            <div class="row">
+                <!-- Columna izquierda -->
+                <div class="col-sm-6">
+                    <div class="form-group row">
+                        <label asp-for="OrderNumber" class="col-sm-4 text-end control-label col-form-label">Número de Orden</label>
+                        <div class="col-sm-8">
+                            <input asp-for="OrderNumber" readonly class="form-control" />
+                            <span asp-validation-for="OrderNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label asp-for="ReceptionDate" class="col-sm-4 text-end control-label col-form-label">Fecha de Recepción</label>
+                        <div class="col-sm-8">
+                            <input asp-for="ReceptionDate" class="form-control" type="date" />
+                            <span asp-validation-for="ReceptionDate" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label asp-for="ClientId" class="col-sm-4 text-end control-label col-form-label">Cliente</label>
+                        <div class="col-sm-8">
+                            <select asp-for="ClientId" asp-items="@( (SelectList)ViewData["ClientId"] )" class="form-control">
+                                <option value="">-- Seleccione un cliente --</option>
+                            </select>
+                            <span asp-validation-for="ClientId" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label asp-for="PersonalItems" class="col-sm-4 text-end control-label col-form-label">Objetos Personales</label>
+                        <div class="col-sm-8">
+                            <textarea asp-for="PersonalItems" class="form-control"></textarea>
+                            <span asp-validation-for="PersonalItems" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna derecha -->
+                <div class="col-sm-6">
+                    <div class="form-group row">
+                        <label asp-for="ReceptionTime" class="col-sm-4 text-end control-label col-form-label">Hora de Recepción</label>
+                        <div class="col-sm-8">
+                            <input asp-for="ReceptionTime" type="time" class="form-control" value="@DateTime.Now.ToString("HH:mm")" />
+                            <span asp-validation-for="ReceptionTime" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label asp-for="VehicleId" class="col-sm-4 text-end control-label col-form-label">Vehículo</label>
+                        <div class="col-sm-8">
+                            <select asp-for="VehicleId" class="form-control" asp-items="@(ViewData["VehicleId"] as SelectList)">
+                                <option value="">-- Seleccione un vehículo --</option>
+                            </select>
+                            <span asp-validation-for="VehicleId" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label asp-for="Observations" class="col-sm-4 text-end control-label col-form-label">Observaciones</label>
+                        <div class="col-sm-8">
+                            <textarea asp-for="Observations" class="form-control"></textarea>
+                            <span asp-validation-for="Observations" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label asp-for="VisitReason" class="col-sm-4 text-end control-label col-form-label">Motivo de Visita</label>
+                        <div class="col-sm-8">
+                            <textarea asp-for="VisitReason" class="form-control" rows="4"></textarea>
+                            <span asp-validation-for="VisitReason" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+
+
+            @* Campos interior *@
+            <hr />
+            <h5>Inspección Interior</h5>
+
+            <div class="row">
+                <!-- Columna 1 -->
+                <div class="col-md-4">
+                    <div class="form-group row">
+                        <label class="col-sm-6 text-end control-label col-form-label">Condición de Tapicería</label>
+                        <div class="col-sm-6">
+                            <select asp-for="UpholsteryOk" asp-items="ViewBag.UpholsteryConditionList" class="form-control"></select>
+                            <span asp-validation-for="UpholsteryOk" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-6 text-end control-label col-form-label">Encendedor funcional</label>
+                        <div class="col-sm-6">
+                            <input type="checkbox" asp-for="LighterOk" />
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Columna 2 -->
+                <div class="col-md-4">
+                    <div class="form-group row">
+                        <label class="col-sm-6 text-end control-label col-form-label">Funcionamiento del A/C</label>
+                        <div class="col-sm-6">
+                            <select asp-for="ACFunctionality" class="form-control">
+                                <option value="">Seleccione</option>
+                                <option value="Cold">Frío</option>
+                                <option value="Average">Regular</option>
+                                <option value="Hot">Caliente</option>
+                            </select>
+                            <span asp-validation-for="ACFunctionality" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-6 text-end control-label col-form-label">Radio funcional</label>
+                        <div class="col-sm-6">
+                            <input type="checkbox" asp-for="RadioOk" />
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- Columna 3 -->
+                <div class="col-md-4">
+
+                    <div class="form-group row">
+                        <label class="col-sm-6 text-end control-label col-form-label">Bocina externa funcional</label>
+                        <div class="col-sm-6">
+                            <input type="checkbox" asp-for="ExternalHornOk" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-6 text-end control-label col-form-label">Cantidad de alfombrillas</label>
+                        <div class="col-sm-6">
+                            <input type="number" asp-for="FloorMatCount" class="form-control" />
+                            <span asp-validation-for="FloorMatCount" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        <label class="control-label">Cristales de Puertas</label>
+                        <select asp-for="Doorwindows" asp-items="ViewBag.DoorWindowOptions" class="form-control"></select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="control-label">Seguros de Puerta</label>
+                        <select asp-for="Doorlocks" asp-items="ViewBag.DoorLockOptions" class="form-control"></select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="control-label">Pito de Bocina</label>
+                        <select asp-for="Carhorn" asp-items="ViewBag.HornOptions" class="form-control"></select>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label for="InteriorPhoto4" class="control-label">Foto  (Inspección Interior)</label>
+                        <input type="file" asp-for="InteriorPhoto4" class="form-control-file" />
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label for="InteriorPhoto5" class="control-label">Foto  (Inspección Interior)</label>
+                        <input type="file" asp-for="InteriorPhoto5" class="form-control-file"  />
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label for="InteriorPhoto6" class="control-label">Foto  (Inspección Interior)</label>
+                        <input type="file" asp-for="InteriorPhoto6" class="form-control-file"  />
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label for="InteriorPhoto7" class="control-label">Foto  (Inspección Interior)</label>
+                        <input type="file" asp-for="InteriorPhoto7" class="form-control-file" accept="image/*" />
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label for="InteriorPhoto8" class="control-label">Foto  (Inspección Interior)</label>
+                        <input type="file" asp-for="InteriorPhoto8" class="form-control-file" accept="image/*" />
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label for="InteriorPhoto6" class="control-label">Video  (Inspección Interior)</label>
+                        <input type="file" asp-for="Interiorvideo" class="form-control-file" accept="image/*" />
+                    </div>
+                </div>
+            </div> 
+            <div>
+                @if (Model.InteriorImages != null && Model.InteriorImages.Any())
+                {
+                    <div class="row">
+                        @foreach (var img in Model.InteriorImages)
+                        {
+                            <div class="col-md-3 col-sm-3" style="margin-bottom:15px;">
+                                <div class="card">
+                                    <img src="@img.Url" alt="Imagen Interior" class="card-img-top" style="max-width: 100%; height: auto;" />
+                                    <div class="card-body text-center">
+                                        <form id="deleteForm-@img.Id" asp-action="DeleteExteriorImage" asp-route-id="@img.Id" method="post" style="display:inline;">
+                                            <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(@img.Id)">Eliminar</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p>No hay imágenes interiores.</p>
+                }
+
+            </div>
+
+            <hr />
+            <h5>Inspección Exterior</h5>
+
+            <div class="row">
+                <!-- Columna izquierda -->
+                <div class="col-sm-4">
+                    <div class="form-group row">
+                        <label class="col-sm-6 text-end control-label col-form-label">Antena de radio en buen estado</label>
+                        <div class="col-sm-6">
+                            <input type="checkbox" asp-for="RadioAntennaOk" />
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-6 text-end control-label col-form-label">Beeper funcionando</label>
+                        <div class="col-sm-6">
+                            <input type="checkbox" asp-for="BeepersOk" />
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="col-md-4">
+
+                    <div class="form-group row">
+                        <label class="col-sm-6 text-end control-label col-form-label">Goma de repuesto presente</label>
+                        <div class="col-sm-6">
+                            <input type="checkbox" asp-for="SpareTirePresent" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-6 text-end control-label col-form-label">Gato y llave presentes</label>
+                        <div class="col-sm-6">
+                            <input type="checkbox" asp-for="JackAndWrenchPresent" />
+                        </div>
+                    </div>
+                </div>
+                <!-- Columna derecha -->
+                <div class="col-sm-4">
+
+                    <div class="form-group row">
+                        <label class="col-sm-6 text-end control-label col-form-label">Retrovisores</label>
+                        <div class="col-sm-6">
+                            <select asp-for="MirrorCondition" asp-items="ViewBag.RetrovisoresList" class="form-control"></select>
+                            <span asp-validation-for="MirrorCondition" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-6 text-end control-label col-form-label">Juego de aros</label>
+                        <div class="col-sm-6">
+                            <select asp-for="HoopGame" asp-items="ViewBag.CentroAroList" class="form-control"></select>
+                            <span asp-validation-for="HoopGame" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-6 text-end control-label col-form-label">Alarma funcionando</label>
+                        <div class="col-sm-6">
+                            <input type="checkbox" asp-for="AlarmWorking" />
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+            <!-- Nueva fila para cargar fotos -->
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label for="ExteriorPhoto1" class="control-label">Foto 1 (Inspección Exterior)</label>
+                        <input type="file" asp-for="ExteriorPhoto1" class="form-control-file" accept="image/*" />
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label for="ExteriorPhoto2" class="control-label">Foto 2 (Inspección Exterior)</label>
+                        <input type="file" asp-for="ExteriorPhoto2" class="form-control-file" accept="image/*" />
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label for="ExteriorPhoto3" class="control-label">Foto 3 (Inspección Exterior)</label>
+                        <input type="file" asp-for="ExteriorPhoto3" class="form-control-file" accept="image/*" />
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label for="ExteriorPhoto3" class="control-label">Foto 3 (Inspección Exterior)</label>
+                        <input type="file" asp-for="ExteriorPhoto4" class="form-control-file" accept="image/*" />
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label for="ExteriorPhoto3" class="control-label">Foto 3 (Inspección Exterior)</label>
+                        <input type="file" asp-for="ExteriorPhoto5" class="form-control-file" accept="image/*" />
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label for="ExteriorPhoto3" class="control-label">Video (Inspección Exterior)</label>
+                        <input type="file" asp-for="ExteriorVideo" class="form-control-file" accept="image/*" />
+                    </div>
+                </div>
+            </div>
+            <div>
+                @if (Model.ExteriorImages != null && Model.ExteriorImages.Any())
+                {
+                    <div class="row">
+                        @foreach (var img in Model.ExteriorImages)
+                        {
+                            <div class="col-md-3 col-sm-3" style="margin-bottom:15px;">
+                                <div class="card">
+                                    <img src="@img.Url" alt="Imagen Interior" class="card-img-top" style="max-width: 100%; height: auto;" />
+                                    <div class="card-body text-center">
+                                        <form id="deleteForm-@img.Id" asp-action="DeleteExteriorImage" asp-route-id="@img.Id" method="post" style="display:inline;">
+                                            <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(@img.Id)">Eliminar</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p>No hay imágenes interiores.</p>
+                }
+            </div>
+
+            <hr />
+
+            <div class="border-top">
+                <div class="card-body">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function confirmDelete(imageId) {
+            Swal.fire({
+                title: '¿Seguro que quieres eliminar esta foto?',
+                text: "Esta acción no se puede deshacer.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Realizar el POST con Fetch
+                    fetch(`/VehicleReception/DeleteExteriorImage/${imageId}`, {
+                        method: 'POST'
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire(
+                                    'Eliminado',
+                                    data.message,
+                                    'success'
+                                ).then(() => {
+                                    location.reload(); // Refresca la página
+                                });
+                            } else {
+                                Swal.fire(
+                                    'Error',
+                                    data.message,
+                                    'error'
+                                );
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            Swal.fire(
+                                'Error',
+                                'No se pudo eliminar la foto.',
+                                'error'
+                            );
+                        });
+                }
+            });
+        }
+    </script>
+}
+
+
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @Html.ValidationSummary()
+    </div>
+}

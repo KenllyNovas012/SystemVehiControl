@@ -1,0 +1,66 @@
+﻿@model IEnumerable<SystemVehiControl.Models.Engine>
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" />
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet" />
+
+<div class="card">
+    <div class="card-body">
+        <h2>Lista de Motor</h2>
+        <a href="@Url.Action("Create", "Engine")" class="btn btn-info btn-sm">Registrar Motor</a>
+        <br /><br />
+        <table id="engine_table" class="table table-striped table-bordered" style="width:100%">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var engine in Model)
+                {
+                    <tr>
+                        <td>@engine.Id</td>
+                        <td>@engine.Name</td>
+                        <td>
+                            <div class="d-flex gap-2">
+                                <a href="@Url.Action("Edit", "Engine", new { id = engine.Id })" class="btn btn-primary btn-sm">Edit</a>
+                                <form id="deleteForm-@engine.Id" method="post" action="@Url.Action("Delete", "Engine", new { id = engine.Id })">
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(@engine.Id)">Delete</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#engine_table').DataTable();
+        });
+
+        function confirmDelete(engineId) {
+            Swal.fire({
+                title: 'Are you sure you want to delete this engine?',
+                text: "This action cannot be undone.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById(`deleteForm-${engineId}`).submit();
+                }
+            });
+        }
+    </script>
+}

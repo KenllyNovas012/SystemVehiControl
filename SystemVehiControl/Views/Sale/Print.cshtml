@@ -1,0 +1,189 @@
+﻿@model SystemVehiControl.Models.Sale
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <title>Factura - @Model.ReceiptSeries@Model.ReceiptNumber</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 40px;
+            color: #333;
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #004080;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+
+            .header h2 {
+                margin: 0;
+                color: #004080;
+                font-weight: bold;
+            }
+
+        .company-info {
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .invoice-info {
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 6px;
+        }
+
+            .invoice-info td {
+                padding: 5px 10px;
+            }
+
+        .table-products th {
+            background-color: #f8f9fa;
+            text-align: center;
+        }
+
+        .table-products td {
+            text-align: center;
+        }
+
+        .totals {
+            width: 300px;
+            float: right;
+            margin-top: 20px;
+        }
+
+            .totals td {
+                padding: 4px;
+            }
+
+        .signature-table {
+            width: 100%;
+            margin-top: 100px;
+        }
+
+            .signature-table td {
+                width: 50%;
+                text-align: center;
+                vertical-align: bottom;
+                height: 100px;
+            }
+
+        .signature-line {
+            border-top: 1px solid #000;
+            width: 80%;
+            margin: 0 auto;
+            padding-top: 5px;
+        }
+
+        @@media print {
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h2>Car-Tech OA</h2>
+        <div class="company-info">
+            Departamento de Servicios Generales<br />
+            Tel:Tel: 809-289-9550 | https://cartechoa.com/<br />
+            Santo Domingo, República Dominicana
+        </div>
+    </div>
+
+    <div class="text-end no-print mb-3">
+        <button class="btn btn-primary" onclick="window.print()">🖨️ Imprimir</button>
+    </div>
+
+    <h4 class="text-center mb-3">FACTURA DE VENTA</h4>
+
+    <table class="invoice-info w-100">
+        <tr>
+            <td><b>Cliente:</b></td>
+            <td>@Model.Person?.Name</td>
+            <td><b>Fecha:</b></td>
+            <td>@Model.DateTime.ToString("dd/MM/yyyy")</td>
+        </tr>
+        <tr>
+            <td><b>Comprobante:</b></td>
+            <td>@Model.ReceiptType - @Model.ReceiptSeries@Model.ReceiptNumber</td>
+            <td><b>Vendedor:</b></td>
+            <td>@Model.User.Name</td>
+        </tr>
+        <tr>
+            <td><b>Estado:</b></td>
+            <td>@Model.Status</td>
+            <td><b>Teléfono Cliente:</b></td>
+            <td>@Model.Person?.Phone</td>
+        </tr>
+    </table>
+
+    <table class="table table-bordered table-products mt-4">
+        <thead>
+            <tr>
+                <th>Artículo</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var d in Model.Details)
+            {
+                <tr>
+                    <td>@d.Article?.Name</td>
+                    <td>@d.Quantity</td>
+                    <td>@d.Price.ToString("N2")</td>
+                    <td>@((d.Quantity * d.Price).ToString("N2"))</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <table class="totals table table-bordered">
+        <tr>
+            <td><b>Sub Total:</b></td>
+            <td class="text-end">
+                @Model.Details.Sum(x => x.Quantity * x.Price).ToString("N2")
+            </td>
+        </tr>
+        <tr>
+            <td><b>ITBIS:</b></td>
+            <td class="text-end">@Model.Tax.ToString("N2")</td>
+        </tr>
+        <tr>
+            <td><b>Total:</b></td>
+            <td class="text-end"><b>@Model.Total.ToString("N2")</b></td>
+        </tr>
+    </table>
+
+    <div style="clear: both;"></div>
+
+    <table class="signature-table">
+        <tr>
+            <td>
+                <div class="signature-line"></div>
+                <strong>Firma de Vendedor</strong><br />
+                <small>@Model.User.Name</small>
+            </td>
+            <td>
+                <div class="signature-line"></div>
+                <strong>Firma del Cliente</strong><br />
+                <small>@Model.Person?.Name</small>
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>

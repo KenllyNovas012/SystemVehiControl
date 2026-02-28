@@ -1,0 +1,75 @@
+@model IEnumerable<SystemVehiControl.Models.Quotation>
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" />
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet" />
+
+@{
+    var comprobantes = (SelectList)ViewBag.ReceiptTypes;
+}
+
+<div class="card">
+    <div class="card-body">
+        <h2>Lista de Cotizaciones</h2>
+        <a href="@Url.Action("Create", "Quotation")" class="btn btn-info btn-sm">Nueva Cotización</a>
+        <br /><br />
+        <table id="quotations_table" class="table table-striped table-bordered" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Cliente</th>
+                    <th>Tipo Comprobante</th>
+                    <th>Serie Comprobante</th>
+                    <th>Número Comprobante</th>
+                    <th>Fecha</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var quotation in Model)
+                {
+                    <tr>
+                        <td>@quotation.Person?.Name</td>
+                        <td>@(comprobantes.FirstOrDefault(x => x.Value == quotation.ReceiptType).Text)</td>
+                        <td>@quotation.ReceiptSeries</td>
+                        <td>@quotation.ReceiptNumber</td>
+                        <td>@quotation.DateTime.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            <div class="d-flex gap-2">
+                                <a href="@Url.Action("Edit", "Quotation", new { id = quotation.QuotationId })" class="btn btn-primary btn-sm">Editar</a>
+                                <form id="deleteForm-@quotation.QuotationId" method="post" action="@Url.Action("Delete", "Quotation", new { id = quotation.QuotationId })">
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(@quotation.QuotationId)">Eliminar</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#quotations_table').DataTable();
+        });
+
+        function confirmDelete(quotationId) {
+            Swal.fire({
+                title: '¿Seguro que quieres eliminar esta cotización?',
+                text: "Esta acción no se puede deshacer.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById(`deleteForm-${quotationId}`).submit();
+                }
+            });
+        }
+    </script>
+}

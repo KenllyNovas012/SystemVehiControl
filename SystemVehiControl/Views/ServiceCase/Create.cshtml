@@ -1,0 +1,97 @@
+﻿@model SystemVehiControl.Models.ServiceCase
+
+<div class="card">
+    <form asp-action="Create" method="post" class="form-horizontal">
+        
+        <div class="card-body">
+            <h4 class="card-title">Crear Caso de Servicio</h4>
+            <input type="hidden" asp-for="Id" />
+
+            <div class="row">
+                <!-- Columna izquierda -->
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="VehicleReceptionId">Recepción Vehículo</label>
+                        <select asp-for="VehicleReceptionId" class="form-control" asp-items="@(ViewData["VehicleReceptions"] as SelectList)">
+                            <option value="">-- Seleccione una recepción --</option>
+                        </select>
+                        <span asp-validation-for="VehicleReceptionId" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="ServiceTypeId">Tipo de Servicio</label>
+                        <select asp-for="ServiceTypeId" class="form-control" asp-items="@(ViewData["ServiceTypes"] as SelectList)">
+                            <option value="">-- Seleccione un tipo de servicio --</option>
+                        </select>
+                        <span asp-validation-for="ServiceTypeId" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="PriorityId">Prioridad</label>
+                        <select asp-for="PriorityId" class="form-control" asp-items="@(ViewData["Priorities"] as SelectList)">
+                            <option value="">-- Seleccione prioridad --</option>
+                        </select>
+                        <span asp-validation-for="PriorityId" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="EntryDate">Fecha de Entrada</label>
+                        <input asp-for="EntryDate" type="date" class="form-control" />
+                        <span asp-validation-for="EntryDate" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="EstimatedDeliveryDate">Fecha Estimada de Entrega</label>
+                        <input asp-for="EstimatedDeliveryDate" type="date" class="form-control" />
+                        <span asp-validation-for="EstimatedDeliveryDate" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- Columna derecha -->
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="UserId">Mecánico</label>
+                        <select asp-for="UserId" class="form-control" asp-items="@(ViewData["Users"] as SelectList)">
+                        </select>
+                        <span asp-validation-for="UserId" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Description">Descripción</label>
+                        <textarea asp-for="Description" class="form-control" rows="4" placeholder="Ingrese descripción del trabajo realizado"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Status">Estado</label>
+                        <select asp-for="Status" class="form-control">
+                            <option value="">-- Seleccione un estado --</option>
+                            <option value="Abierto">Abierto</option>
+                            <option value="En proceso">En proceso</option>
+                            <option value="Cerrado">Cerrado</option>
+                            <option value="En espera">En espera</option>
+                        </select>
+                        <span asp-validation-for="Status" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="CloseDate">Fecha de Cierre</label>
+                        <input asp-for="CloseDate" type="date" class="form-control" />
+                        <span asp-validation-for="CloseDate" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="border-top">
+            <div class="card-body">
+                <button type="submit" class="btn btn-primary">Guardar</button>
+                <a href="@Url.Action("Index", "ServiceCase")" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

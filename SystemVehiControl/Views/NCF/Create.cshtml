@@ -1,0 +1,92 @@
+﻿@model SystemVehiControl.Models.NCF
+
+<div class="card">
+    <form asp-action="Create" method="post" class="form-horizontal">
+        <div class="card-body">
+            <h4 class="card-title">Registrar Nuevo NCF</h4>
+
+            <div class="form-group row">
+                <label asp-for="NCFType" class="col-sm-3 text-end control-label col-form-label">Tipo NCF</label>
+                <div class="col-sm-9">
+                    <input asp-for="NCFType" class="form-control" placeholder="Ej: B01, E31..." />
+                    <span asp-validation-for="NCFType" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="StartRange" class="col-sm-3 text-end control-label col-form-label">Rango Inicio</label>
+                <div class="col-sm-9">
+                    <input asp-for="StartRange" type="number" class="form-control" placeholder="Ej: 1" />
+                    <span asp-validation-for="StartRange" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="EndRange" class="col-sm-3 text-end control-label col-form-label">Rango Fin</label>
+                <div class="col-sm-9">
+                    <input asp-for="EndRange" type="number" class="form-control" placeholder="Ej: 1000" />
+                    <span asp-validation-for="EndRange" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="CurrentSequence" class="col-sm-3 text-end control-label col-form-label">Secuencia Actual</label>
+                <div class="col-sm-9">
+                    <input asp-for="CurrentSequence" type="number" class="form-control" placeholder="Ej: 25" />
+                    <span asp-validation-for="CurrentSequence" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="VerificationCode" class="col-sm-3 text-end control-label col-form-label">Código Verificación</label>
+                <div class="col-sm-9">
+                    <input asp-for="VerificationCode" class="form-control" placeholder="Ej: ABC123XYZ" />
+                    <span asp-validation-for="VerificationCode" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="Status" class="col-sm-3 text-end control-label col-form-label">Estado</label>
+                <div class="col-sm-9">
+                    <select asp-for="Status" class="form-control">
+                        <option value="Active">Activo</option>
+                        <option value="Inactive">Inactivo</option>
+                    </select>
+                    <span asp-validation-for="Status" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-- Opcional: mostrar solo si quieres que el usuario seleccione manualmente -->
+            @* 
+            <div class="form-group row">
+                <label asp-for="CreatedAt" class="col-sm-3 text-end control-label col-form-label">Creado En</label>
+                <div class="col-sm-9">
+                    <input asp-for="CreatedAt" type="datetime-local" class="form-control" />
+                    <span asp-validation-for="CreatedAt" class="text-danger"></span>
+                </div>
+            </div>
+            *@
+
+        </div>
+
+        <div class="border-top">
+            <div class="card-body">
+                <button type="submit" class="btn btn-primary">Guardar</button>
+                <a href="@Url.Action("Index", "NCF")" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @Html.ValidationSummary()
+    </div>
+}

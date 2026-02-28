@@ -1,0 +1,167 @@
+﻿@model SystemVehiControl.Models.VehicleReception
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Recepción de Vehículo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            margin: 20px;
+            color: #333;
+        }
+
+        h2, h4 {
+            margin: 0;
+            padding: 0;
+        }
+
+        .header, .footer {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+            .header h2 {
+                font-size: 22px;
+                font-weight: bold;
+            }
+
+        /* Estilo de tabla tomado del despacho de servicio */
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+            .info-table td {
+                border: 1px solid #000;
+                padding: 6px;
+                vertical-align: top;
+            }
+
+            .info-table strong {
+                display: inline-block;
+                min-width: 130px; /* Mantener la alineación de las etiquetas */
+            }
+
+        /* Estilo de caja de descripción/observaciones */
+        .desc-box {
+            border: 1px solid #000;
+            padding: 10px;
+            min-height: 80px; /* Ajustado para observaciones */
+            margin-bottom: 20px;
+        }
+
+        .sign-section {
+            width: 100%;
+            margin-top: 50px;
+        }
+
+            .sign-section td {
+                width: 50%;
+                text-align: center;
+                padding-top: 50px;
+            }
+
+        @@media print {
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>Car-Tech OA</h2>
+        <p>Santo Domingo, República Dominicana | Tel: 809-289-9550 </p>
+        <h4>Recepción de Vehículo</h4>
+    </div>
+
+    <table class="info-table">
+        <tr>
+            <td><strong>ID Recepción:</strong> @Model.VehicleReceptionId</td>
+            <td><strong>No. Orden:</strong> @Model.OrderNumber</td>
+            <td><strong>Fecha Recepción:</strong> @Model.ReceptionDate.ToString("dd/MM/yyyy")</td>
+        </tr>
+        <tr>
+            <td colspan="3"><strong>Motivo de Visita:</strong> @Model.VisitReason</td>
+        </tr>
+    </table>
+
+    <table class="info-table">
+        <tr>
+            <td colspan="3" style="background-color: #f0f0f0;"><strong>INFORMACIÓN DEL CLIENTE</strong></td>
+        </tr>
+        <tr>
+            <td><strong>Nombre:</strong> @Model.Client?.FullName</td>
+            <td><strong>Cédula:</strong> @Model.Client?.IdentificationNumber</td>
+            <td><strong>Teléfono:</strong> @Model.Client?.MobileNumber</td>
+        </tr>
+        <tr>
+            <td colspan="3"><strong>Correo:</strong> @Model.Client?.Email</td>
+        </tr>
+    </table>
+
+    @if (Model.Vehicle != null)
+    {
+        <table class="info-table">
+            <tr>
+                <td colspan="3" style="background-color: #f0f0f0;"><strong>INFORMACIÓN DEL VEHÍCULO</strong></td>
+            </tr>
+            <tr>
+                <td><strong>Marca:</strong> @Model.Vehicle.Brand?.Name</td>
+                <td><strong>Modelo:</strong> @Model.Vehicle.Model</td>
+                <td><strong>Año:</strong> @Model.Vehicle.Year</td>
+            </tr>
+            <tr>
+                <td><strong>Placa:</strong> @Model.Vehicle.LicensePlate</td>
+                <td><strong>Chasis:</strong> @Model.Vehicle.ChassisNumber</td>
+                <td><strong>Color:</strong> @Model.Vehicle.Color</td>
+            </tr>
+            <tr>
+                <td><strong>Kilometraje:</strong> @Model.Vehicle.Mileage</td>
+                <td><strong>Combustible:</strong> @Model.Vehicle.FuelType</td>
+                <td></td>
+            </tr>
+        </table>
+    }
+
+    <div>
+        <strong>Observaciones:</strong>
+        <div class="desc-box">
+            @Model.Observations
+        </div>
+    </div>
+
+    <table class="sign-section">
+        <tr>
+            <td>
+                ___________________________<br />
+                <strong>Recibido por (Taller)</strong>
+            </td>
+            <td>
+                ___________________________<br />
+                <strong>Entregado por (Cliente)</strong>
+            </td>
+        </tr>
+    </table>
+
+    <div class="footer no-print">
+        <button onclick="window.print()">🖨️ Imprimir / Guardar como PDF</button>
+        @* Asegúrate de que esta URL sea correcta para volver al índice *@
+        <a href="@Url.Action("Index", "VehicleReception")">Volver</a>
+    </div>
+
+    <script>
+        // Auto abrir impresión al cargar
+        window.onload = function () {
+            setTimeout(() => window.print(), 800);
+        };
+    </script>
+</body>
+</html>

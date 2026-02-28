@@ -1,0 +1,48 @@
+﻿@model SystemVehiControl.Models.Priority
+
+@{
+    ViewData["Title"] = "Registrar Prioridad";
+}
+
+<div class="card">
+    <form asp-action="Create" method="post" class="form-horizontal">
+        <div class="card-body">
+            <h4 class="card-title">Registrar Nueva Prioridad</h4>
+
+            <div class="form-group row">
+                <label asp-for="Level" class="col-sm-3 text-end control-label col-form-label">Nivel</label>
+                <div class="col-sm-9">
+                    <input asp-for="Level" class="form-control" placeholder="Ej. Bajo, Medio, Alto" />
+                    <span asp-validation-for="Level" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="Description" class="col-sm-3 text-end control-label col-form-label">Descripción</label>
+                <div class="col-sm-9">
+                    <textarea asp-for="Description" class="form-control" placeholder="Ingrese una descripción"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+            </div>
+
+        </div>
+        <div class="border-top">
+            <div class="card-body">
+                <button type="submit" class="btn btn-primary">Guardar</button>
+                <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @Html.ValidationSummary()
+    </div>
+}

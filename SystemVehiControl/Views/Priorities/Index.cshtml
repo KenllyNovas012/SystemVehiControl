@@ -1,0 +1,67 @@
+﻿@model IEnumerable<SystemVehiControl.Models.Priority>
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" />
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet" />
+
+<div class="card">
+    <div class="card-body">
+        <h2>Lista de Prioridades</h2>
+        <a href="@Url.Action("Create", "Priorities")" class="btn btn-info btn-sm">Nueva Prioridad</a>
+        <br /><br />
+        <table id="priority_table" class="table table-striped table-bordered" style="width:100%">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nivel</th>
+                    <th>Descripción</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var priority in Model)
+                {
+                    <tr>
+                        <td>@priority.PriorityId</td>
+                        <td>@priority.Level</td>
+                        <td>@priority.Description</td>
+                        <td>
+                            <div class="d-flex gap-2">
+                                <a href="@Url.Action("Edit", "Priorities", new { id = priority.PriorityId })" class="btn btn-primary btn-sm">Editar</a>
+                                <form id="deleteForm-@priority.PriorityId" method="post" action="@Url.Action("Delete", "Priorities", new { id = priority.PriorityId })">
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(@priority.PriorityId)">Eliminar</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#priority_table').DataTable();
+        });
+        function confirmDelete(clientId) {
+            Swal.fire({
+                title: '¿Seguro que quieres eliminar este cliente?',
+                text: "Esta acción no se puede deshacer.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById(`deleteForm-${clientId}`).submit();
+                }
+            });
+        }
+    </script>
+}

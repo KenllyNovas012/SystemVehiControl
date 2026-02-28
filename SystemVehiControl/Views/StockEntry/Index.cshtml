@@ -1,0 +1,83 @@
+﻿@model IEnumerable<SystemVehiControl.Models.StockEntry>
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" />
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet" />
+
+@{
+    var StockEntries = Model.OrderByDescending(x => x.DateTime);
+    var tiposComprobante = (SelectList)ViewBag.TiposComprobante;
+}
+
+
+<div class="card">
+    <div class="card-body">
+        <h2>Lista de Ingresos</h2>
+        <a href="@Url.Action("Create", "StockEntry")" class="btn btn-info btn-sm">Nuevo Ingreso</a>
+        <br /><br />
+        <table id="clients_table" class="table table-striped table-bordered" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Suplidor </th>
+                    <th> Tipo Comprobante</th>
+                    <th>Serie Comprobante </th>
+                    <th>Numero Comprobante</th>
+                    <th>Fecha</th>
+                    <th>Impuesto</th>
+                    <th>Total</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var StockEntry in StockEntries)
+                {
+                    <tr>
+                        <td>@StockEntry.Supplier.Name</td>
+                        <td>@(tiposComprobante.FirstOrDefault(x => x.Value == StockEntry.ReceiptType).Text)</td>
+                        <td>@StockEntry.ReceiptSeries</td>
+                        <td>@StockEntry.ReceiptNumber</td>
+                        <td>@StockEntry.DateTime.ToString("dd/MM/yyyy")</td>
+                        <td>@StockEntry.Tax</td>
+                        <td>@StockEntry.Total.ToString("N2")</td>
+                        <td>
+                            <div class="d-flex gap-2">
+                                <a href="@Url.Action("Edit", "StockEntry", new { id = StockEntry.StockEntryId })" class="btn btn-primary btn-sm">Editar</a>
+                                <form id="deleteForm-@StockEntry.StockEntryId" method="post" action="@Url.Action("Delete", "StockEntry", new { id = StockEntry.StockEntryId })">
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(@StockEntry.StockEntryId)">Eliminar</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#clients_table').DataTable({
+                  order: [[4, 'desc']]
+            });
+        });
+
+        function confirmDelete(clientId) {
+            Swal.fire({
+                title: '¿Seguro que quieres eliminar este ingreso?',
+                text: "Esta acción no se puede deshacer.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById(`deleteForm-${clientId}`).submit();
+                }
+            });
+        }
+    </script>
+}

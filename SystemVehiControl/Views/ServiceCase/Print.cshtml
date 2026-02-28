@@ -1,0 +1,160 @@
+﻿@model SystemVehiControl.Models.ServiceCase
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Despacho de Servicio</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            margin: 20px;
+            color: #333;
+        }
+
+        h2, h4 {
+            margin: 0;
+            padding: 0;
+        }
+
+        .header, .footer {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+            .header h2 {
+                font-size: 22px;
+                font-weight: bold;
+            }
+
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+            .info-table td {
+                border: 1px solid #000;
+                padding: 6px;
+                vertical-align: top;
+            }
+
+            .info-table strong {
+                display: inline-block;
+                min-width: 130px;
+            }
+
+        .desc-box {
+            border: 1px solid #000;
+            padding: 10px;
+            min-height: 100px;
+            margin-bottom: 20px;
+        }
+
+        .sign-section {
+            width: 100%;
+            margin-top: 50px;
+        }
+
+            .sign-section td {
+                width: 50%;
+                text-align: center;
+                padding-top: 50px;
+            }
+
+        @@media print {
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>Car-Tech OA</h2>
+        <p>Santo Domingo, República Dominicana | Tel: 809-289-9550 </p>
+        <h4>Despacho de Servicio</h4>
+    </div>
+
+    <!-- Información general del caso -->
+    <table class="info-table">
+        <tr>
+            <td><strong>No. Caso:</strong> @Model.Id</td>
+            <td><strong>Fecha Entrada:</strong> @Model.EntryDate.ToString("dd/MM/yyyy")</td>
+            <td><strong>Entrega Estimada:</strong> @Model.EstimatedDeliveryDate.ToString("dd/MM/yyyy")</td>
+        </tr>
+        <tr>
+            <td><strong>Mecánico:</strong> @Model.GetUser?.Name</td>
+            <td><strong>Tipo Servicio:</strong> @Model.ServiceType?.Name</td>
+            <td><strong>Prioridad:</strong> @Model.Priority?.Level</td>
+        </tr>
+        <tr>
+            <td><strong>Estado del Caso:</strong> @Model.Status</td>
+            <td><strong>Fecha de Cierre:</strong> @(Model.CloseDate.HasValue? Model.CloseDate.Value.ToString("dd/MM/yyyy") : "-")</td>
+            <td></td>
+        </tr>
+    </table>
+
+    <!-- Información del cliente y vehículo -->
+    @if (Model.VehicleReception != null)
+    {
+        <table class="info-table">
+            <tr>
+                <td><strong>Cliente:</strong> @Model.VehicleReception.Client?.FullName</td>
+                <td><strong>Cédula:</strong> @Model.VehicleReception.Client?.IdentificationNumber</td>
+                <td><strong>Orden No.:</strong> @Model.VehicleReception.OrderNumber</td>
+            </tr>
+            @if (Model.VehicleReception.Vehicle != null)
+            {
+                <tr>
+                    <td><strong>Marca:</strong> @Model.VehicleReception.Vehicle.Brand?.Name</td>
+                    <td><strong>Modelo:</strong> @Model.VehicleReception.Vehicle.Model</td>
+                    <td><strong>Año:</strong> @Model.VehicleReception.Vehicle.Year</td>
+                </tr>
+                <tr>
+                    <td><strong>Placa:</strong> @Model.VehicleReception.Vehicle.LicensePlate</td>
+                    <td><strong>Chasis:</strong> @Model.VehicleReception.Vehicle.ChassisNumber</td>
+                    <td><strong>Color:</strong> @Model.VehicleReception.Vehicle.Color</td>
+                </tr>
+                <tr>
+                    <td><strong>Kilometraje:</strong> @Model.VehicleReception.Vehicle.Mileage</td>
+                    <td><strong>Combustible:</strong> @Model.VehicleReception.Vehicle.FuelType</td>
+                    <td></td>
+                </tr>
+            }
+        </table>
+    }
+
+    <!-- Descripción -->
+    <div>
+        <strong>Descripción del trabajo realizado:</strong>
+        <div class="desc-box">
+            @Model.Description
+        </div>
+    </div>
+
+    <!-- Firmas -->
+    <table class="sign-section">
+        <tr>
+            <td>
+                ___________________________<br />
+                <strong>Entregado por (Taller)</strong>
+            </td>
+            <td>
+                ___________________________<br />
+                <strong>Recibido por (Cliente)</strong>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Botón de impresión -->
+    <div class="footer no-print">
+        <button onclick="window.print()">🖨️ Imprimir</button>
+        <a href="@Url.Action("Index", "ServiceCase")">Volver</a>
+    </div>
+</body>
+</html>

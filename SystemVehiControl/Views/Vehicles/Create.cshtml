@@ -1,0 +1,104 @@
+﻿@model SystemVehiControl.Models.Vehicle
+
+<div class="card">
+    <form asp-action="Create" method="post" class="form-horizontal">
+        <div class="card-body">
+            <h4 class="card-title">Registrar Nuevo Vehículo</h4>
+
+            <div class="form-group row">
+                <label asp-for="LicensePlate" class="col-sm-3 text-end control-label col-form-label">Placa</label>
+                <div class="col-sm-9">
+                    <input asp-for="LicensePlate" class="form-control" placeholder="Ingrese placa" />
+                    <span asp-validation-for="LicensePlate" class="text-danger"></span>
+                </div>
+            </div>
+
+         
+            <div class="form-group row">
+                <label asp-for="ChassisNumber" class="col-sm-3 text-end control-label col-form-label">Número de Chasis</label>
+                <div class="col-sm-9">
+                    <input asp-for="ChassisNumber" required class="form-control" placeholder="Ingrese número de chasis" />
+                    <span asp-validation-for="ChassisNumber" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="BrandId" class="col-sm-3 text-end control-label col-form-label">Marca</label>
+                <div class="col-sm-9">
+                    <select asp-for="BrandId" class="form-control" asp-items="@(ViewData["BrandId"] as SelectList)">
+                        <option value="">Seleccione una marca</option>
+                    </select>
+                    <span asp-validation-for="BrandId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="Model" class="col-sm-3 text-end control-label col-form-label">Modelo</label>
+                <div class="col-sm-9">
+                    <input asp-for="Model" required class="form-control" placeholder="Ingrese modelo" />
+                    <span asp-validation-for="Model" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="Year" class="col-sm-3 text-end control-label col-form-label">Año</label>
+                <div class="col-sm-9">
+                    <input asp-for="Year" type="number" min="1900" max="2100" required class="form-control" placeholder="Ingrese año" />
+                    <span asp-validation-for="Year" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="Color" class="col-sm-3 text-end control-label col-form-label">Color</label>
+                <div class="col-sm-9">
+                    <input asp-for="Color" class="form-control" placeholder="Ingrese color" />
+                    <span asp-validation-for="Color" class="text-danger"></span>
+                </div>
+            </div>
+                       
+
+            <div class="form-group row">
+                <label asp-for="Mileage" class="col-sm-3 text-end control-label col-form-label">Kilometraje / Milla</label>
+                <div class="col-sm-9">
+                    <input asp-for="Mileage" class="form-control" placeholder="Ingrese kilometraje" />
+                    <span asp-validation-for="Mileage" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="FuelType" class="col-sm-3 text-end control-label col-form-label">Tipo de Combustible</label>
+                <div class="col-sm-9">
+                    <select asp-for="FuelType" asp-items="ViewBag.FuelTypeList" class="form-control"></select>
+                    <span asp-validation-for="FuelType" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="EngineId" class="col-sm-3 text-end control-label col-form-label">Tipo de Motor</label>
+                <div class="col-sm-9">
+                    <select asp-for="EngineId" class="form-control" asp-items="@(ViewData["EngineId"] as SelectList)">
+                        <option value="">Seleccione una Tipo de Motor</option>
+                    </select>
+                    <span asp-validation-for="EngineId" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="border-top">
+            <div class="card-body">
+                <button type="submit" class="btn btn-primary">Guardar</button>
+                <a href="@Url.Action("Index", "Vehicles")" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @Html.ValidationSummary()
+    </div>
+}

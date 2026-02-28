@@ -1,0 +1,215 @@
+@model SystemVehiControl.Models.Sale
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" name="sale.SaleId" value="@Model.SaleId" />
+
+    <div class="card">
+        <div class="card-header">
+            <h4>Editar Venta</h4>
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label>Cliente</label>
+                    <select name="sale.PersonId" class="form-control">
+                        @foreach (var item in (SelectList)ViewBag.Clients)
+                        {
+                            <!option selected="@item.Selected" value="@item.Value">@item.Text</!option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="ReceiptType">Tipo Comprobante</label>
+                    <select name="sale.ReceiptType" class="form-control">
+                        <!option value="">Seleccione un tipo</!option>
+                        @foreach (var item in (SelectList)ViewBag.ReceiptTypes)
+                        {
+                            <!option selected="@item.Selected" value="@item.Value">@item.Text</!option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label asp-for="ReceiptSeries">Serie</label>
+                    <input name="sale.ReceiptSeries" class="form-control" value="@Model.ReceiptSeries" />
+                </div>
+                <div class="col-md-2">
+                    <label asp-for="ReceiptNumber">Número</label>
+                    <input name="sale.ReceiptNumber" class="form-control" value="@Model.ReceiptNumber" />
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label name="DateTime">Fecha</label>
+                    <input name="sale.DateTime" type="datetime-local" class="form-control" value="@Model.DateTime.ToString("yyyy-MM-ddTHH:mm")" />
+                </div>
+                <div class="col-md-4">
+                    <label name="Tax">Impuesto</label>
+                    <input name="sale.Tax" class="form-control" value="@Model.Tax" />
+                </div>
+                <div class="col-md-4">
+                    <label name="Total">Total</label>
+                    <input name="sale.Total" class="form-control" readonly value="@Model.Total.ToString("N2")" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h5>Agregar Artículos</h5>
+        </div>
+        <div class="card-body">
+            <div class="form-group row">
+                <label class="col-sm-2 text-end col-form-label">Artículo</label>
+                <div class="col-sm-4">
+                    <select name="ArticleId" class="form-control" asp-items="ViewBag.Articles">
+                        <option value="">Seleccione un artículo</option>
+                    </select>
+                </div>
+                <label class="col-sm-1 text-end col-form-label">Cantidad</label>
+                <div class="col-sm-2">
+                    <input type="number" name="Quantity" class="form-control" />
+                </div>
+                <label class="col-sm-1 text-end col-form-label">Precio</label>
+                <div class="col-sm-2">
+                    <input type="number" step="0.01" name="Price" class="form-control" />
+                </div>
+                <div class="col-sm-12 mt-3 text-end">
+                    <button type="button" id="btn-add" name="accion" value="agregar" class="btn btn-info">Agregar Producto</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h5>Detalle de Artículos</h5>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered" id="sale-detail">
+                <thead>
+                    <tr>
+                        <th>Artículo</th>
+                        <th>Cantidad</th>
+                        <th>Precio</th>
+                        <th>Subtotal</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Details != null && Model.Details.Any())
+                    {
+                        var idx = 0;
+                        foreach (var item in Model.Details)
+                        {
+                            <tr>
+                                <td>
+                                    <input type="hidden" readonly class="form-control" name="sale.Details[@idx].ArticleId" value="@item.ArticleId" />
+                                    <input type="hidden" readonly class="form-control" name="sale.Details[@idx].SaleDetailId" value="@item.SaleDetailId" />
+                                    <input type="text" readonly class="form-control" name="sale.Details[@idx].Name" value="@item.Article?.Name" />
+                                </td>
+                                <td>
+                                    <input type="number" readonly class="form-control" name="sale.Details[@idx].Quantity" value="@item.Quantity" />
+                                </td>
+                                <td>
+                                    <input type="number" readonly class="form-control" name="sale.Details[@idx].Price" value="@item.Price" />
+                                </td>
+                                <td>
+                                    <input type="text" readonly class="form-control" name="sale.Details[@idx].Subtotal" value="@((@item.Quantity * @item.Price).ToString("N2"))" />
+                                </td>
+                                <td>
+                                    <button type="button" name="accion" class="btn btn-danger btn-sm btn-delete">Eliminar</button>
+                                </td>
+                            </tr>
+                            idx++;
+                        }
+                    }
+                    else
+                    {
+                        <tr><td colspan="5" class="text-center">No hay artículos agregados.</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <br />
+    <div class="text-end">
+        <a href="@Url.Action("Index", "Sale")" class="btn btn-secondary">Cancelar</a>
+
+        <button type="submit" name="accion" value="guardar" class="btn btn-success">Guardar Cambios</button>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var detalleIndex = $('#sale-detail tbody tr').length;
+            function actualizarTotal() {
+                var total = 0;
+                $('#sale-detail tbody tr').each(function () {
+                    var subtotal = parseFloat($(this).find('input[name$=".Subtotal"]').val()) || 0;
+                    total += subtotal;
+                });
+                $('input[name="sale.Total"]').val(total.toFixed(2));
+            }
+            $('#btn-add').click(function () {
+                var articuloSelect = $('select[name="ArticleId"]');
+                var articuloId = articuloSelect.val();
+                var articuloText = articuloSelect.find('option:selected').text();
+                var articuloVal = articuloSelect.find('option:selected').val();
+                var cantidad = $('input[name="Quantity"]').val();
+                var precio = $('input[name="Price"]').val();
+                if (!articuloId || !cantidad || !precio) {
+                    alert('Debe completar todos los campos para agregar el producto.');
+                    return;
+                }
+                var subtotal = (parseFloat(cantidad) * parseFloat(precio)).toFixed(2);
+                var fila = '<tr>' +
+                    '<td> <input type="hidden" readonly class="form-control" name="sale.Details[' + detalleIndex + '].ArticleId" value="' + articuloVal + '" />'+
+                     '<input type="text" readonly class="form-control" name="sale.Details[' + detalleIndex + '].Name" value="' + articuloText + '" /></td>' +
+                    '<td><input type="number" readonly class="form-control" name="sale.Details[' + detalleIndex + '].Quantity" value="' + cantidad + '" /></td>' +
+                    '<td><input type="number" readonly class="form-control" name="sale.Details[' + detalleIndex + '].Price" value="' + precio + '" /></td>' +
+                    '<td><input type="number" readonly class="form-control" name="sale.Details[' + detalleIndex + '].Subtotal" value="' + subtotal + '" /></td>' +
+                    '<td><button type="button" class="btn btn-danger btn-sm btn-delete">Eliminar</button></td>' +
+                    '</tr>';
+                $('#sale-detail tbody').append(fila);
+                detalleIndex++;
+                articuloSelect.val('');
+                $('input[name="Quantity"]').val('');
+                $('input[name="Price"]').val('');
+                actualizarTotal();
+            });
+            $('#sale-detail').on('click', '.btn-delete', function () {
+                $(this).closest('tr').remove();
+                // Reordenar los índices de las filas restantes
+                $('#sale-detail tbody tr').each(function (i, row) {
+                    $(row).find('input, select, textarea').each(function () {
+                        var name = $(this).attr('name');
+                        if (name) {
+                            var newName = name.replace(/sale\.Details\[\d+\]/, 'sale.Details[' + i + ']');
+                            $(this).attr('name', newName);
+                        }
+                    });
+                });
+                actualizarTotal();
+            });
+            // VALIDACIÓN ANTES DE ENVIAR EL FORMULARIO
+            $('form').on('submit', function (e) {
+                var vacio = false;
+                if ($('select[name="sale.PersonId"]').val() === "") vacio = true;
+                if ($('select[name="sale.ReceiptType"]').val() === "") vacio = true;
+                if ($('input[name="sale.ReceiptSeries"]').val() === "") vacio = true;
+                if ($('input[name="sale.ReceiptNumber"]').val() === "") vacio = true;
+                if ($('input[name="sale.DateTime"]').val() === "") vacio = true;
+                if ($('input[name="sale.Tax"]').val() === "") vacio = true;
+                if ($('#sale-detail tbody tr').length === 0) vacio = true;
+                if (vacio) {
+                    alert('Debe completar todos los campos obligatorios y agregar al menos un artículo.');
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
+}

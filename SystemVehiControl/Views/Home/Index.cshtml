@@ -1,0 +1,181 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="card mt-0">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="peity_line_neutral left text-center mt-2">
+                        <span>
+                            <span style="display: none;">
+                                <span style="display: none;">
+                                    <span style="display: none"><span style="display: none;">10,15,8,14,13,10,10</span><canvas width="62.5" height="30" style="width:50px;height:24px"></canvas></span>
+                                    <canvas width="50" height="24"></canvas>
+                                </span>
+                                <canvas width="62.5" height="30" style="width:50px;height:24px"></canvas>
+                            </span>
+                            <canvas width="62.5" height="30" style="width:50px;height:24px"></canvas>
+                        </span>
+                        <h6>10%</h6>
+                    </div>
+                </div>
+                <div class="col-md-6 border-left text-center pt-2">
+                    <h3 class="mb-0 fw-bold">@ViewBag.usersCount</h3>
+                    <span class="text-muted">Usuarios</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card mt-0">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="peity_bar_bad left text-center mt-2">
+                        <span>
+                            <span style="display: none;">
+                                <span style="display: none;">
+                                    <span style="display: none"><span style="display: none;">3,5,6,16,8,10,6</span><canvas width="62.5" height="30" style="width:50px;height:24px"></canvas></span>
+                                    <canvas width="50" height="24"></canvas>
+                                </span>
+                                <canvas width="62.5" height="30" style="width:50px;height:24px"></canvas>
+                            </span>
+                            <canvas width="62.5" height="30" style="width:50px;height:24px"></canvas>
+                        </span>
+                        <h6>-40%</h6>
+                    </div>
+                </div>
+                <div class="col-md-6 border-left text-center pt-2">
+                    <h3 class="mb-0 fw-bold">@ViewBag.ServiceCases</h3>
+                    <span class="text-muted">Casos</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card mt-0">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="peity_line_good left text-center mt-2">
+                        <span>
+                            <span style="display: none;">
+                                <span style="display: none;">
+                                    <span style="display: none"><span style="display: none;">12,6,9,23,14,10,17</span><canvas width="62.5" height="30" style="width:50px;height:24px"></canvas></span>
+                                    <canvas width="50" height="24"></canvas>
+                                </span>
+                                <canvas width="62.5" height="30" style="width:50px;height:24px"></canvas>
+                            </span>
+                            <canvas width="62.5" height="30" style="width:50px;height:24px"></canvas>
+                        </span>
+                        <h6>+60%</h6>
+                    </div>
+                </div>
+                <div class="col-md-6 border-left text-center pt-2">
+                    <h3 class="mb-0">@ViewBag.vehicles</h3>
+                    <span class="text-muted">Vehiculos</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card mt-0">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="peity_bar_good left text-center mt-2">
+                        <span><span style="display: none;">12,6,9,23,14,10,13</span><canvas width="62.5" height="30" style="width:50px;height:24px"></canvas></span>
+                        <h6>+30%</h6>
+                    </div>
+                </div>
+                <div class="col-md-6 border-left text-center pt-2">
+                    <h3 class="mb-0 fw-bold">@ViewBag.ClientsCount</h3>
+                    <span class="text-muted">Clientes</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Column -->
+    <div class="col-md-6 col-lg-4 col-xlg-3">
+        <div class="card card-hover">
+            <div class="box bg-success text-center">
+                <h1 class="font-light text-white">
+                    <i class="mdi mdi-chart-areaspline"></i>
+                </h1>
+                <a href="/Person/Index" style="text-decoration:none;"> <h6 class="text-white">Clientes</h6></a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-2 col-xlg-3">
+        <div class="card card-hover">
+            <div class="box bg-danger text-center">
+                <h1 class="font-light text-white">
+                    <i class="mdi mdi-border-outside"></i>
+                </h1>
+                <a href="/Vehicles/Index" style="text-decoration:none;"> <h6 class="text-white">Vehiculos</h6></a>
+            </div>
+        </div>
+    </div>
+    <!-- Column -->
+
+    <!-- Column -->
+    <div class="col-md-6 col-lg-2 col-xlg-3">
+        <div class="card card-hover">
+            <div class="box bg-info text-center">
+                <h1 class="font-light text-white">
+                    <i class="mdi mdi-arrow-all"></i>
+                </h1>
+                <a href="/VehicleReception/Index" style="text-decoration:none;"> <h6 class="text-white">Recepción</h6></a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Column -->
+    <div class="col-md-6 col-lg-2 col-xlg-3">
+        <div class="card card-hover">
+            <div class="box bg-warning text-center">
+                <h1 class="font-light text-white">
+                    <i class="mdi mdi-collage"></i>
+                </h1>
+                <a href="/ServiceCase/Index" style="text-decoration:none;"><h6 class="text-white">Casos</h6></a>
+            </div>
+        </div>
+    </div>
+    <!-- Column -->
+    <div class="col-md-6 col-lg-2 col-xlg-3">
+        <div class="card card-hover">
+            <div class="box bg-cyan text-center">
+                <h1 class="font-light text-white">
+                    <i class="mdi mdi-view-dashboard"></i>
+                    <a href="/User/Index" style="text-decoration:none;"></a>
+                </h1>
+                <a href="/User/Index" style="text-decoration:none;"> <h6 class="text-white">Users</h6></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Column -->
+    <!-- Column -->
+    
+    <!-- Column -->
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Real Time Chart</h5>
+                <div id="real-time" style="height: 400px; padding: 0px; position: relative;"><canvas class="flot-base" width="1488" height="500" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 1190.8px; height: 400px;"></canvas><div class="flot-text" style="position: absolute; inset: 0px; font-size: smaller; color: rgb(84, 84, 84);"><div class="flot-x-axis flot-x1-axis xAxis x1Axis" style="position: absolute; inset: 0px;"><div class="flot-tick-label tickLabel" style="position: absolute; max-width: 108px; top: 381px; left: 18px; text-align: center;">0</div><div class="flot-tick-label tickLabel" style="position: absolute; max-width: 108px; top: 381px; left: 131px; text-align: center;">10</div><div class="flot-tick-label tickLabel" style="position: absolute; max-width: 108px; top: 381px; left: 248px; text-align: center;">20</div><div class="flot-tick-label tickLabel" style="position: absolute; max-width: 108px; top: 381px; left: 365px; text-align: center;">30</div><div class="flot-tick-label tickLabel" style="position: absolute; max-width: 108px; top: 381px; left: 482px; text-align: center;">40</div><div class="flot-tick-label tickLabel" style="position: absolute; max-width: 108px; top: 381px; left: 599px; text-align: center;">50</div><div class="flot-tick-label tickLabel" style="position: absolute; max-width: 108px; top: 381px; left: 716px; text-align: center;">60</div><div class="flot-tick-label tickLabel" style="position: absolute; max-width: 108px; top: 381px; left: 833px; text-align: center;">70</div><div class="flot-tick-label tickLabel" style="position: absolute; max-width: 108px; top: 381px; left: 950px; text-align: center;">80</div><div class="flot-tick-label tickLabel" style="position: absolute; max-width: 108px; top: 381px; left: 1067px; text-align: center;">90</div></div><div class="flot-y-axis flot-y1-axis yAxis y1Axis" style="position: absolute; inset: 0px;"><div class="flot-tick-label tickLabel" style="position: absolute; top: 366px; left: 2px; text-align: right;">10</div><div class="flot-tick-label tickLabel" style="position: absolute; top: 305px; left: 2px; text-align: right;">20</div><div class="flot-tick-label tickLabel" style="position: absolute; top: 244px; left: 2px; text-align: right;">30</div><div class="flot-tick-label tickLabel" style="position: absolute; top: 183px; left: 2px; text-align: right;">40</div><div class="flot-tick-label tickLabel" style="position: absolute; top: 122px; left: 2px; text-align: right;">50</div><div class="flot-tick-label tickLabel" style="position: absolute; top: 61px; left: 2px; text-align: right;">60</div><div class="flot-tick-label tickLabel" style="position: absolute; top: 0px; left: 2px; text-align: right;">70</div></div></div><canvas class="flot-overlay" width="1488" height="500" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 1190.8px; height: 400px;"></canvas></div>
+                <p>
+                   
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
